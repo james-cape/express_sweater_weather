@@ -4,23 +4,20 @@
     "password": null,
     "database": "express_sweater_weather_development",
     "host": "127.0.0.1",
-    "dialect": "postgres",
-    "operatorsAliases": false
+    "dialect": "postgres"
   },
   "test": {
     "username": "jamescape",
     "password": null,
     "database": "express_sweater_weather_test",
     "host": "127.0.0.1",
-    "dialect": "postgres",
-    "operatorsAliases": false
+    "dialect": "postgres"
   },
   "production": {
     "username": "jamescape",
     "password": null,
     "database": "express_sweater_weather_production",
     "host": "127.0.0.1",
-    "dialect": "postgres",
-    "operatorsAliases": false
+    "dialect": "postgres"
   }
 }

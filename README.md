@@ -7,3 +7,17 @@ Based on Backend Mod 4 [project requirements](https://backend.turing.io/module4/
 * Clearly document Introduction, Initial Setup, How to Use, Known Issues, Running Tests, How to Contribute, Core Contributors, Schema Design, and Tech Stack List
 * Implement testing in JavaScript
 * Familiarize self with mechanics of building an Express API
+
+Tech used:
+dotenv
+
+
+jest
+`npm install jest -g`
+`npm install babel-jest supertest shelljs -D`
+`npm i -g jest-cli`
+To run just one test file,
+`jest test_file.spec.js`
+
+bcrypt
+`npm install bcrypt`
