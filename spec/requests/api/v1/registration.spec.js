@@ -19,6 +19,7 @@ describe('api', () => {
 
   describe('Test POST /api/v1/users path', () => {
     describe('Test POST /api/v1/users path', () => {
+
       test('should return a 201 status with api key', () => {
         let params = {
           "email": "my_email@example.com",
@@ -28,12 +29,26 @@ describe('api', () => {
 
         return request(app).post("/api/v1/users").send(params)
           .then(response => {
-            debugger;
             expect(response.status).toBe(201),
             expect.objectContaining({ api_key: expect.any(String)}),
             expect(response.body["api_key"].length).toBeGreaterThan(0);
         });
       });
+
+      test('unmatching passwords should return a 401 status and error ', () => {
+        let params = {
+          "email": "my_email@example.com",
+          "password": "password",
+          "password_confirmation": "wrong_password"
+        }
+
+        return request(app).post("/api/v1/users").send(params)
+          .then(response => {
+            expect(response.status).toBe(401),
+            expect(response.body).toBe({ error: "Passwords do not match"}),
+        });
+      });
+
     });
   });
 });
