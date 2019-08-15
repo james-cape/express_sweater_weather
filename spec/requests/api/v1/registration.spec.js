@@ -35,7 +35,7 @@ describe('api', () => {
         });
       });
 
-      test('unmatching passwords should return a 401 status and error ', () => {
+      test('unmatching passwords should return a 401 status and error', () => {
         let params = {
           "email": "my_email@example.com",
           "password": "password",
@@ -45,10 +45,51 @@ describe('api', () => {
         return request(app).post("/api/v1/users").send(params)
           .then(response => {
             expect(response.status).toBe(401),
-            expect(response.body).toBe({ error: "Passwords do not match"}),
+            expect(response.body).toMatchObject({error: "Passwords do not match"});
         });
       });
 
+      test('missing email', () => {
+        let params = {
+          "email": null,
+          "password": "password",
+          "password_confirmation": "password"
+        }
+
+        return request(app).post("/api/v1/users").send(params)
+          .then(response => {
+            expect(response.status).toBe(401),
+            expect(response.body).toMatchObject({error: "Missing an entry"});
+        });
+      });
+
+      test('missing password', () => {
+        let params = {
+          "email": "my_email@example.com",
+          "password": null,
+          "password_confirmation": "password"
+        }
+
+        return request(app).post("/api/v1/users").send(params)
+          .then(response => {
+            expect(response.status).toBe(401),
+            expect(response.body).toMatchObject({error: "Missing an entry"});
+        });
+      });
+
+      test('missing password_confirmation', () => {
+        let params = {
+          "email": "my_email@example.com",
+          "password": "password",
+          "password_confirmation": null
+        }
+
+        return request(app).post("/api/v1/users").send(params)
+          .then(response => {
+            expect(response.status).toBe(401),
+            expect(response.body).toMatchObject({error: "Missing an entry"});
+        });
+      });
     });
   });
 });
