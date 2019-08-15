@@ -18,27 +18,22 @@ describe('api', () => {
   });
 
   describe('Test POST /api/v1/users path', () => {
-    test('should return a 201 status', () => {
-      let params = {
-        "email": "my_email@example.com",
-        "password": "password",
-        "password_confirmation": "password"
-      }
+    describe('Test POST /api/v1/users path', () => {
+      test('should return a 201 status with api key', () => {
+        let params = {
+          "email": "my_email@example.com",
+          "password": "password",
+          "password_confirmation": "password"
+        }
 
-      return request(app).post("/api/v1/users").then(response => {
-        expect(response.status).toBe(201)
+        return request(app).post("/api/v1/users").send(params)
+          .then(response => {
+            debugger;
+            expect(response.status).toBe(201),
+            expect.objectContaining({ api_key: expect.any(String)}),
+            expect(response.body["api_key"].length).toBeGreaterThan(0);
+        });
       });
     });
-
-
-    // test('should return an array of game objects', () => {
-    //   return request(app).get("/api/v1/games").then(response => {
-    //     expect(response.body.length).toEqual(4),
-    //     expect(Object.keys(response.body[0])).toContain('title')
-    //     expect(Object.keys(response.body[0])).toContain('price'),
-    //     expect(Object.keys(response.body[0])).toContain('releaseYear'),
-    //     expect(Object.keys(response.body[0])).toContain('active')
-    //   })
-    // });
   });
 });

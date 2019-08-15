@@ -21,3 +21,9 @@ To run just one test file,
 
 bcrypt
 `npm install bcrypt`
+
+Heroku:
+https://stormy-retreat-53831.herokuapp.com/
+
+Questions for PMs:
+How to fully test the user creation post request?
