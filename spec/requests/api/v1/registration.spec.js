@@ -31,6 +31,7 @@ describe('api', () => {
           .then(response => {
             expect(response.status).toBe(201),
             expect.objectContaining({ api_key: expect.any(String)}),
+            expect(response.body["api_key"]).not.toBe(null),
             expect(response.body["api_key"].length).toBeGreaterThan(0);
         });
       });
