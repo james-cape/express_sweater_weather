@@ -3,6 +3,8 @@ var request = require("supertest");
 var app = require('./../../../../app');
 var User = require('./../../../../models').User;
 
+const bcrypt = require('bcrypt');
+
 describe('api', () => {
   beforeAll(() => {
     shell.exec('npx sequelize db:create')
@@ -20,7 +22,6 @@ describe('api', () => {
 
   describe('Test POST /api/v1/sessions path', () => {
     describe('Test POST /api/v1/sessions path', () => {
-
       test('should return a 200 status with api key', () => {
         let params = {
           "email": "my_email@example.com",
@@ -29,7 +30,7 @@ describe('api', () => {
 
         return User.create({
             email: "my_email@example.com",
-            password: "password",
+            password: bcrypt.hashSync("password", 10),
             apiKey: "12345"
         })
         .then (user => {
@@ -42,33 +43,65 @@ describe('api', () => {
         });
       });
 
-      // test('missing email', () => {
-      //   let params = {
-      //     "email": null,
-      //     "password": "password",
-      //     "password_confirmation": "password"
-      //   }
-      //
-      //   return request(app).post("/api/v1/sessions").send(params)
-      //     .then(response => {
-      //       expect(response.status).toBe(401),
-      //       expect(response.body).toMatchObject({error: "Missing an entry"});
-      //   });
-      // });
-      //
-      // test('missing password', () => {
-      //   let params = {
-      //     "email": "my_email@example.com",
-      //     "password": null,
-      //     "password_confirmation": "password"
-      //   }
-      //
-      //   return request(app).post("/api/v1/sessions").send(params)
-      //     .then(response => {
-      //       expect(response.status).toBe(401),
-      //       expect(response.body).toMatchObject({error: "Missing an entry"});
-      //   });
-      // });
+      test('missing email', () => {
+        let params = {
+          "email": null,
+          "password": "password",
+        }
+
+        return User.create({
+            email: "my_email@example.com",
+            password: bcrypt.hashSync("password", 10),
+            apiKey: "12345"
+        })
+        .then (user => {
+          return request(app).post("/api/v1/sessions").send(params)
+        })
+        .then(response => {
+            expect(response.status).toBe(401);
+            expect(response.body).toMatchObject({error: "Missing an entry"});
+        });
+      });
+
+      test('missing password', () => {
+        let params = {
+          "email": "my_email@example.com",
+          "password": null,
+        }
+
+        return User.create({
+            email: "my_email@example.com",
+            password: bcrypt.hashSync("password", 10),
+            apiKey: "12345"
+        })
+        .then (user => {
+          return request(app).post("/api/v1/sessions").send(params)
+        })
+        .then(response => {
+            expect(response.status).toBe(401);
+            expect(response.body).toMatchObject({error: "Missing an entry"});
+        });
+      });
+
+      test('wrong password', () => {
+        let params = {
+          "email": "my_email@example.com",
+          "password": "wrong_password",
+        }
+
+        return User.create({
+            email: "my_email@example.com",
+            password: bcrypt.hashSync("password", 10),
+            apiKey: "12345"
+        })
+        .then (user => {
+          return request(app).post("/api/v1/sessions").send(params)
+        })
+        .then(response => {
+            expect(response.status).toBe(401);
+            expect(response.body).toMatchObject({error: "Incorrect password"});
+        });
+      });
     });
   });
 });

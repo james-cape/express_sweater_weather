@@ -10,25 +10,24 @@ const crypto = require('crypto');
 /* POST user login. */
 router.post('/', function(req, res, next) {
   if (req.body.email && req.body.password) {
-  //
-  //   if (bcrypt.compareSync(req.body.password, user.password)) {
       User.findOne({
         where: {
           email: req.body.email
         }
       })
       .then(user => {
-        res.setHeader("Content-Type", "application/json");
-        res.status(200).send(JSON.stringify({api_key: user.apiKey}));
+        if (bcrypt.compareSync(req.body.password, user.password)) {
+          res.setHeader("Content-Type", "application/json");
+          res.status(200).send(JSON.stringify({api_key: user.apiKey}));
+        } else {
+          res.setHeader("Content-Type", "application/json");
+          res.status(401).send(JSON.stringify({error: "Incorrect password"}));
+        }
       })
       .catch(error => {
         res.setHeader("Content-Type", "application/json");
         res.status(401).send({ error });
       });
-  //   } else {
-  //     res.setHeader("Content-Type", "application/json");
-  //     res.status(401).send(JSON.stringify({error: "Incorrect password"}));
-  //   }
   } else {
     res.setHeader("Content-Type", "application/json");
     res.status(401).send(JSON.stringify({error: "Missing an entry"}));
