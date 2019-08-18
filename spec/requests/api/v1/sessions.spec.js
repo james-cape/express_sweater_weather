@@ -102,6 +102,25 @@ describe('api', () => {
             expect(response.body).toMatchObject({error: "Incorrect password"});
         });
       });
+
+      test('no email on file', () => {
+        let params = {
+          "email": "your_email@example.com",
+          "password": "password",
+        }
+        return User.create({
+            email: "my_email@example.com",
+            password: bcrypt.hashSync("password", 10),
+            apiKey: "12345"
+        })
+        .then (user => {
+          return request(app).post("/api/v1/sessions").send(params)
+        })
+        .then(response => {
+            expect(response.status).toBe(401);
+            expect(response.body).toMatchObject({error: "That email address is not on file"});
+        });
+      });
     });
   });
 });

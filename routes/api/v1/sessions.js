@@ -26,7 +26,7 @@ router.post('/', function(req, res, next) {
       })
       .catch(error => {
         res.setHeader("Content-Type", "application/json");
-        res.status(401).send({ error });
+        res.status(401).send(JSON.stringify({error: "That email address is not on file"}));
       });
   } else {
     res.setHeader("Content-Type", "application/json");
