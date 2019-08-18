@@ -26,7 +26,7 @@ describe("Geocoding and forecast api", () => {
         password: bcrypt.hashSync("password", 10),
         apiKey: "12345"
     })
-    .then (user => {
+    .then(user => {
       return request(app).get('/api/v1/forecast?location=denver,co').send({api_key: user.apiKey})
     })
     .then(response => {

@@ -1,7 +1,8 @@
 var shell = require('shelljs');
 var request = require("supertest");
 var app = require('../../app');
-var CoordinatesService = require('../../services/coordinates_service').CoordinatesService;
+var CoordinatesService = require('../../services/coordinates_service');
+require('dotenv').config()
 
 describe('CoordinatesService', () => {
   beforeAll(() => {
@@ -18,26 +19,21 @@ describe('CoordinatesService', () => {
     shell.exec('npx sequelize db:drop')
   });
 
-  test('turns city,state into lat/long'), () => {
-    let service = new CoordinateService()
-
-    let location = service.get_results('denver,co')
-
-    expect.objectContaining({
-      citystate: expect.any(String),
-      country: expect.any(String),
-      coordinates: expect.any({
-        lat: expect.any(Float),
-        lng: expect.any(Float)
-      })
+  test('turns city,state into lat/long', async () => {
+    let service = new CoordinatesService('denver,co');
+    debugger;
+    var service1 = await service.getResults()
+    // return service.getResults()
+    .then(response => {
+      expect(response.status).toBe(200);
+      expect.objectContaining({
+        citystate: expect.any(String),
+        country: expect.any(String),
+        coordinates: expect.any({
+          lat: expect.any(Float),
+          lng: expect.any(Float)
+        })
+      });
     })
-
-    // expect(location).to have_key(:citystate)
-    // expect(location).to have_key(:country)
-    // expect(location).to have_key(:coordinates)
-    // expect(location[:coordinates]).to have_key(:lat)
-    // expect(location[:coordinates]).to have_key(:lng)
-
-  }
-
+  });
 })

@@ -14,6 +14,7 @@
     "express": "~4.16.1",
     "figaro-js": "^3.0.2",
     "morgan": "~1.9.1",
+    "node-fetch": "^2.6.0",
     "pg": "^7.12.1",
     "sequelize": "^5.13.1",
     "sequelize-cli": "^5.5.0"

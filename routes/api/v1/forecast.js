@@ -46,4 +46,16 @@ router.get('/', function(req, res, next) {
   }
 });
 
+let getResults = async () => {
+  fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${this.location}&key=${process.env.GEOCODE_GOOGLE_API_KEY}`)
+  .then(response => {
+    return response.json();
+
+  })
+  .catch(error => {
+    res.setHeader("Content-Type", "application/json");
+    res.status(401).send({ error });
+  });
+}
+
 module.exports = router;
