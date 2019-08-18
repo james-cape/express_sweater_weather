@@ -3,6 +3,8 @@ var request = require("supertest");
 var app = require('./../../../../app');
 var User = require('./../../../../models').User;
 
+const bcrypt = require('bcrypt');
+
 describe("Geocoding and forecast api", () => {
   beforeAll(() => {
     shell.exec('npx sequelize db:create')

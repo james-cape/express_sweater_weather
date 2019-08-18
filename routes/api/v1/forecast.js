@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
       .then(user => {
         if (user) {
           res.setHeader("Content-Type", "application/json");
-          let coordinates = new GeocodingService(req.query.location);
+          let coordinates = new CoordinatesService(req.query.location);
           return coordinates.get_results()
           res.status(200).send(JSON.stringify({api_key: user.apiKey}))
           .then(response => {
