@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
           res.setHeader("Content-Type", "application/json");
           let coordinates = new GeocodingService(req.query.location);
           return coordinates.get_results()
-          res.status(200).send(JSON.stringify({api_key: user.apiKey}));
+          res.status(200).send(JSON.stringify({api_key: user.apiKey}))
           .then(response => {
             let location = response.results[0].get_location;
             let forecast = new ForecastService(location["lat"], location["long"]);
