@@ -31,9 +31,17 @@ describe("Geocoding and forecast api", () => {
     })
     .then(response => {
         expect(response.status).toBe(200);
-        // expect.objectContaining({ api_key: expect.any(String)})
-        debugger;
-        expect(response.body).toEqual("asdf");
+
+        const body = response.body
+debugger;
+        expect(Object.keys(body)).toEql(["data"]),
+        expect(Object.keys(body["data"])).toEql(["location", "currently", "hourly", "daily"]),
+        expect(body["data"]["location"]).toEql("denver,co"),
+        expect(body["data"]["location"]).toEql("denver,co"),
+
+        expect(body["data"]["hourly"].length).toEql(8),
+        expect(body["data"]["daily"].length).toEql(7),
+
     });
   });
 });
