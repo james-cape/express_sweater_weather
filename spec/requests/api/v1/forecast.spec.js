@@ -30,18 +30,98 @@ describe("Geocoding and forecast api", () => {
       return request(app).get('/api/v1/forecast?location=denver,co').send({api_key: user.apiKey})
     })
     .then(response => {
-        expect(response.status).toBe(200);
+      expect(response.status).toBe(200);
 
-        const body = response.body
-debugger;
-        expect(Object.keys(body)).toEql(["data"]),
-        expect(Object.keys(body["data"])).toEql(["location", "currently", "hourly", "daily"]),
-        expect(body["data"]["location"]).toEql("denver,co"),
-        expect(body["data"]["location"]).toEql("denver,co"),
+      const body = response.body
+      expect(Object.keys(body)).toEqual(["data"]),
+      expect(Object.keys(body["data"])).toEqual(["location", "currently", "hourly", "daily"]),
+      expect(body["data"]["location"]).toEqual("denver,co"),
 
-        expect(body["data"]["hourly"].length).toEql(8),
-        expect(body["data"]["daily"].length).toEql(7),
+      expect(Object.keys(body["data"]["currently"])).toEqual([
+        "time",
+        "summary",
+        "icon",
+        "nearestStormDistance",
+        "nearestStormBearing",
+        "precipIntensity",
+        "precipProbability",
+        "temperature",
+        "apparentTemperature",
+        "dewPoint",
+        "humidity",
+        "pressure",
+        "windSpeed",
+        "windGust",
+        "windBearing",
+        "cloudCover",
+        "uvIndex",
+        "visibility",
+        "ozone"
+      ]),
 
+      expect(body["data"]["hourly"].length).toEqual(8),
+      expect(Object.keys(body["data"]["hourly"][0])).toEqual([
+        "time",
+        "summary",
+        "icon",
+        "precipIntensity",
+        "precipProbability",
+        "temperature",
+        "apparentTemperature",
+        "dewPoint",
+        "humidity",
+        "pressure",
+        "windSpeed",
+        "windGust",
+        "windBearing",
+        "cloudCover",
+        "uvIndex",
+        "visibility",
+        "ozone"
+      ]),
+
+
+      expect(body["data"]["daily"].length).toEqual(7),
+      expect(Object.keys(body["data"]["daily"][0])).toEqual([
+        "time",
+        "summary",
+        "icon",
+        "sunriseTime",
+        "sunsetTime",
+        "moonPhase",
+        "precipIntensity",
+        "precipIntensityMax",
+        "precipIntensityMaxTime",
+        "precipProbability",
+        "temperatureHigh",
+        "temperatureHighTime",
+        "temperatureLow",
+        "temperatureLowTime",
+        "apparentTemperatureHigh",
+        "apparentTemperatureHighTime",
+        "apparentTemperatureLow",
+        "apparentTemperatureLowTime",
+        "dewPoint",
+        "humidity",
+        "pressure",
+        "windSpeed",
+        "windGust",
+        "windGustTime",
+        "windBearing",
+        "cloudCover",
+        "uvIndex",
+        "uvIndexTime",
+        "visibility",
+        "ozone",
+        "temperatureMin",
+        "temperatureMinTime",
+        "temperatureMax",
+        "temperatureMaxTime",
+        "apparentTemperatureMin",
+        "apparentTemperatureMinTime",
+        "apparentTemperatureMax",
+        "apparentTemperatureMaxTime"
+      ])
     });
   });
 });
