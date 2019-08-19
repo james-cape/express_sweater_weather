@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var User = require('./../../../models').User;
+// var forecastSerializer = require('./../../serializers').forecastSerializer;
+var forecastSerializer = require('../../../serializers/forecast_serializer');
 const fetch = require('node-fetch');
 require('dotenv').config();
 
@@ -27,7 +29,7 @@ router.get('/', async (req, res) => {
             .then(response => response.text())
             .then(body => {
               res.setHeader("Content-Type", "application/json");
-              res.status(200).send(JSON.stringify({data: body}));
+              res.status(200).send(JSON.stringify({data: new forecastSerializer(body,req.query.location)}));
             })
           })
           .catch(error => {
