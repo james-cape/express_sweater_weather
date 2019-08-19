@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('./../../../models').User;
+const fetch = require('node-fetch');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -26,7 +27,7 @@ router.post('/', function(req, res, next) {
       })
       .catch(error => {
         res.setHeader("Content-Type", "application/json");
-        res.status(401).send(JSON.stringify({error: "That email address is not on file"}));
+        res.status(401).send({error: "That email address is not on file"});
       });
   } else {
     res.setHeader("Content-Type", "application/json");
