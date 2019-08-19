@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var User = require('./../../../models').User;
+const fetch = require('node-fetch');
+require('dotenv').config();
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -8,32 +10,30 @@ const saltRounds = 10;
 const crypto = require('crypto');
 
 /* GET forecast for city. */
-router.get('/', function(req, res, next) {
+router.get('/', async (req, res) => {
   if (req.body.api_key) {
-      User.findOne({
+      await User.findOne({
         where: {
           apiKey: req.body.api_key
         }
       })
       .then(user => {
         if (user) {
-          res.setHeader("Content-Type", "application/json");
-          let coordinates = new CoordinatesService(req.query.location);
-          return coordinates.get_results()
-          res.status(200).send(JSON.stringify({api_key: user.apiKey}))
-          .then(response => {
-            let location = response.results[0].get_location;
-            let forecast = new ForecastService(location["lat"], location["long"]);
-            return forecast.get_results()
-            .then(forecast => {
-              res.status(200).send(JSON.stringify({
-                location: "find in object",
-                currently: "find in object",
-                hourly: "find in object",
-                daily: "find in object"
-              })
-            )})
+          fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${req.query.location}&key=${process.env.GEOCODE_GOOGLE_API_KEY}`)
+          .then(response => response.text())
+          .then(body => JSON.parse(body)["results"][0]["geometry"]["location"])
+          .then(coordinates => {
+            fetch(`https://api.darksky.net/forecast/${process.env.DARK_SKY_API_KEY}/${coordinates["lat"]},${coordinates["lng"]}`)
+            .then(response => response.text())
+            .then(body => {
+              res.setHeader("Content-Type", "application/json");
+              res.status(200).send(JSON.stringify({data: body}));
+            })
           })
+          .catch(error => {
+            res.setHeader("Content-Type", "application/json");
+            res.status(401).send({ error });
+          });
         }
       })
       .catch(error => {
@@ -46,11 +46,10 @@ router.get('/', function(req, res, next) {
   }
 });
 
-let getResults = async () => {
-  fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${this.location}&key=${process.env.GEOCODE_GOOGLE_API_KEY}`)
+const getResults = async (location) => {
+  fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${process.env.GEOCODE_GOOGLE_API_KEY}`)
   .then(response => {
     return response.json();
-
   })
   .catch(error => {
     res.setHeader("Content-Type", "application/json");

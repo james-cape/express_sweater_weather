@@ -20,7 +20,7 @@ describe("Geocoding and forecast api", () => {
     shell.exec('npx sequelize db:drop')
   });
 
-  xtest("should return current weather for a city/state", () => {
+  test("should return current weather for a city/state", () => {
     return User.create({
         email: "my_email@example.com",
         password: bcrypt.hashSync("password", 10),
@@ -31,8 +31,9 @@ describe("Geocoding and forecast api", () => {
     })
     .then(response => {
         expect(response.status).toBe(200);
-        expect.objectContaining({ api_key: expect.any(String)})
-        // expect(response.body["api_key"].length).toBeGreaterThan(0);
+        // expect.objectContaining({ api_key: expect.any(String)})
+        debugger;
+        expect(response.body).toEqual("asdf");
     });
   });
 });
